@@ -15,10 +15,19 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+import settings
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
 	url(r'^wechat/', 'wechat.views.index', name = 'index'),
 	url(r'^create_menu/', 'wechat.views.create_menu', name = 'create_menu'),
 	url(r'^user_info/', 'wechat.views.user_info', name = 'user_info'),
+	url(r'^register/', 'wechat.views.register', name = 'register'),
+	url(r'^academyInfo/(?P<academyinfo_name_slug>[\w\-]+)/$', 'wechat.views.academyInfo', name = 'academyInfo'),
+	
+	url(r'^userPost/', 'wechat.views.userPost', name = 'userPost'),
+	url(r'^ajaxTest/', 'wechat.views.ajaxTest', name = 'ajaxTest'),
+	
+	url(r'^media/(?P<path>.*)$', 'django.views.static.serve', { 'document_root': settings.MEDIA_ROOT }),
+	url(r'^static/(?P<path>.*)$','django.views.static.serve',{ 'document_root': settings.STATIC_PATH }),
 ]
