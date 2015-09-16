@@ -1,7 +1,10 @@
 ﻿#encoding:utf-8
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.db import connection
 from django.core.exceptions import *
+
+
 from wechat.config import *
 from wechat.functions import *
 from wechat.models import *
@@ -75,7 +78,7 @@ def user_info(request):
 	# 判断用户的 openid 是否在 StudentInfo 表中存在
 	try:
 		isExist = StudentInfo.objects.get(openid = user_dict['openid'])
-	except ObjectDoesNotExist:
+	except StudentInfo.DoesNotExist:
 		# 构造申请成为认证用户的地址
 		callback = 'http://www.itcastcpp.cn/register/'
 		showUrl = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + WEIXIN_APPID + '&redirect_uri=' + callback + '&response_type=code&scope=snsapi_userinfo&state=snsapi_userinfo#wechat_redirect'
@@ -88,10 +91,10 @@ def user_info(request):
 		if isExist.isRegister:
 			# 获取用户的个人信息
 			userInfo = {}
+			userInfo["userId"]	 = isExist.id
 			userInfo["imageUrl"] = isExist.photoAddr
 			userInfo["userName"] = isExist.nickName
 			userInfo["inClass"]	 = isExist.inClass
-			
 			return render(request, 'authorized.html', userInfo)
 	
 	# 检索学院列表信息
@@ -134,10 +137,7 @@ def register(request):
 	# https://docs.djangoproject.com/en/1.8/ref/models/querysets/#exclude
 	# 只取近 60 天内开的班
 	begDate = datetime.datetime.now() + datetime.timedelta(days = -60)
-	for classInfo in user_info['academyInfoList']:
-		print begDate
-		user_info['classInfo'] = ClassInfo.objects.filter(academyID = classInfo.id, classBegDate__gt = begDate)
-		break
+	user_info['classInfo'] = ClassInfo.objects.filter(academyID = academyInfoList[0], classBegDate__gt = begDate)
 	
 	return render(request, 'register.html', user_info)
 	
@@ -157,7 +157,7 @@ def userPost(request):
 	if request.method == "POST":
 		stuInfo = StudentInfo(
 			openid = request.POST.get("openid"),						# openid
-			isRegister = False,											# 由老师管理设置，True为认证成功，Flase为等待认证
+			isRegister = False,											# 由老师管理设置，True为认证成功，False为等待认证
 			nickName = request.POST.get("nickname"),					# 用户昵称，由微信接口获取
 			stuSex = request.POST.get("sex"),							# 用户性别，由微信接口获取
 			stuName = request.POST.get("username"),						# 用户名称，由用户自己输入
@@ -172,6 +172,58 @@ def userPost(request):
 	else:
 		return HttpResponse('亲，别乱点...')
 
+def student(request, student_name_slug):
+	# 根据班级信息获取班级里面所有学生
+	context_dict = {}
+	
+	try:
+		classInfo = ClassInfo.objects.get(slug = student_name_slug)
+	except classInfo.DoesNotExist:
+		pass
+	else:
+		try:
+			sutList = StudentInfo.objects.filter(inClass = classInfo.id, isRegister = True)
+		except StudentInfo.DoesNotExist:
+			pass
+		else:
+			context_dict["stuList"] = sutList
+
+	return render(request, "student.html", context_dict)
+
+def courseList(request, course_name_slug):
+	# 构造用户每个阶段的课程和测试信息
+	stuId = request.GET.get("userId")
+	context_dict = {}
+	
+	# 获取用户所在班级的开班时间
+	begTime = StudentInfo.objects.get(id = stuId).inClass.classBegDate
+	dateRet = datetime.date.today() - begTime
+	classTime = dateRet.days
+	
+	# 写个自定义sql，django实在实现不了
+	cursor = connection.cursor()
+	cursor.execute("select g.stuID_id, s.lessonName, s.timeOut, g.grade "
+				"from wechat_syllabusinfo s left outer join "
+				"(select * from wechat_gradeinfo where stuID_id = " + stuId + ") g "
+				"on s.id = g.syllaID_id")
+	context_dict["courseList"] = dictfetchall(cursor)
+	context_dict["classTime"] = classTime
+
+	return render(request, "courseList.html", context_dict)
+
+def topic(request):
+	context_dict = {}
+	return render(request, "courseList.html", context_dict)
+	
+def help(request):
+	context_dict = {}
+	return render(request, "courseList.html", context_dict)
+	
+def about(request):
+	context_dict = {}
+	return render(request, "courseList.html", context_dict)
+	
 def ajaxTest(request):
 	appid	= request.GET.get("appid")
 	return HttpResponse('ajax ok...')
+	

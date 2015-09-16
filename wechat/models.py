@@ -11,12 +11,13 @@ SyllabusInfo	# 课程表
 TestInfo		# 测试题目表
 StudentInfo		# 用户信息表
 GradeInfo		# 测试结果表
+CREATE DATABASE itcast_wechat DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 """
 
 class AcademyInfo(models.Model):
 	#AcademyInfo	学院信息
 	academyName = models.CharField(max_length = 100,unique = True)	# 名称
-	slug = models.SlugField(unique=True)							# 无空格的学院名称
+	slug = models.SlugField(unique = True)							# 无空格的学院名称
 	academyPre = models.CharField(max_length = 30)					# 院长
 	academyIntro = models.TextField()								# 简介
 	academyImage = models.ImageField(upload_to = 'upload')			# 学院图片
@@ -32,8 +33,13 @@ class ClassInfo(models.Model):
 	#ClassInfo	班级信息表
 	academyID = models.ForeignKey(AcademyInfo)			# 所在学院ID
 	className = models.CharField(max_length = 100)		# 班级名称
+	slug = models.SlugField(unique = True)				# 用来做页面跳转
 	classBegDate = models.DateField()					# 开班日期
 	classCharge = models.CharField(max_length = 30)		# 班主任
+	
+	def save(self, *args, **kwargs):
+		self.slug = slugify(self.className)
+		super(ClassInfo, self).save(*args, **kwargs)
 	
 	def __unicode__(self):
 		return self.className
@@ -62,7 +68,7 @@ class StudentInfo(models.Model):
 	openid = models.CharField(max_length = 100, unique = True)			# 标识用户唯一身份的openid
 	isRegister = models.BooleanField(default=False)		# 是否是认证学员，默认不是
 	nickName = models.CharField(max_length = 30)		# 微信昵称
-	stuSex = models.BooleanField(default=True)			# 微信标识的性别
+	stuSex = models.IntegerField(default=True)			# 微信标识的性别
 	stuName = models.CharField(max_length = 30)			# 学员真实名称，注册时输入的
 	inClass = models.ForeignKey(ClassInfo)				# 所属班级，外键约束ClassInfo表
 	tel = models.CharField(max_length = 20)				# 电话
@@ -90,12 +96,12 @@ class StudentInfo(models.Model):
 
 class GradeInfo(models.Model):	
 	# GradeInfo	测试结果表
-	stuName = models.ForeignKey(StudentInfo)		# 所属学员ID
-	syllaID  = models.ForeignKey(SyllabusInfo)		# 所属课程ID
-	grade = models.IntegerField()					# 测试结果
+	stuID = models.ForeignKey(StudentInfo)			# 所属学员ID
+	syllaID = models.ForeignKey(SyllabusInfo)		# 所属课程ID
+	grade = models.CharField(max_length = 10)		# 测试结果
 
 	def __unicode__(self):
-		return self.stuName
+		return self.grade
 
 """
 #EmployInfo	NUM.8_jiuye

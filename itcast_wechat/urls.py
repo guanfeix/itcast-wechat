@@ -24,6 +24,11 @@ urlpatterns = [
 	url(r'^user_info/', 'wechat.views.user_info', name = 'user_info'),
 	url(r'^register/', 'wechat.views.register', name = 'register'),
 	url(r'^academyInfo/(?P<academyinfo_name_slug>[\w\-]+)/$', 'wechat.views.academyInfo', name = 'academyInfo'),
+	url(r'^student/(?P<student_name_slug>[\w\-]+)/$', 'wechat.views.student', name = "student"),
+	url(r'^courseList/(?P<course_name_slug>[\w\-]+)/$', 'wechat.views.courseList', name = "courseList"),
+	url(r'^topic/', 'wechat.views.topic', name = "topic"),
+	url(r'^help/', 'wechat.views.help', name = "help"),
+	url(r'^about/', 'wechat.views.about', name = "about"),
 	
 	url(r'^userPost/', 'wechat.views.userPost', name = 'userPost'),
 	url(r'^ajaxTest/', 'wechat.views.ajaxTest', name = 'ajaxTest'),

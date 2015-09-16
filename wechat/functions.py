@@ -50,8 +50,17 @@ def my_post(url, data):
 	resp, content = h.request(url, 'POST', data)
 	return resp, content
 	
+def dictfetchall(cursor):
+	"Returns all rows from a cursor as a dict"
+	"将自定义sql返回的列表转为字典 http://python.usyiyi.cn/django/topics/db/sql.html#executing-custom-sql-directly"
+	desc = cursor.description
+	return [
+		dict(zip([col[0] for col in desc], row))
+		for row in cursor.fetchall()
+	]
+	
 def get_access_token():
-
+	# 获取 access_token 存入 WEIXIN_ACCESS_TOKEN
 	if wechat.config.WEIXIN_ACCESS_TOKEN_LASTTIME == 0 or (int(time.time()) - wechat.config.WEIXIN_ACCESS_TOKEN_LASTTIME > wechat.config.WEIXIN_ACCESS_TOKEN_EXPIRES_IN - 300):
 	
 		resp, result = my_get(wechat.config.WEIXIN_ACCESS_TOKEN_URL)
@@ -66,36 +75,3 @@ def get_access_token():
 	else:
 		print "old access_token ->> " + wechat.config.WEIXIN_ACCESS_TOKEN + "---" + str(wechat.config.WEIXIN_ACCESS_TOKEN_LASTTIME) + "---" + str(wechat.config.WEIXIN_ACCESS_TOKEN_EXPIRES_IN)
 		return wechat.config.WEIXIN_ACCESS_TOKEN
-
-	'''
-	if (WEIXIN_ACCESS_TOKEN == '' and WEIXIN_ACCESS_TOKEN_LASTTIME == '') or (datetime.now() - WEIXIN_ACCESS_TOKEN_LASTTIME > 7200 - 300):
-		resp, result = my_get(WEIXIN_ACCESS_TOKEN_URL)
-        decodejson = parse_Json2Dict(result)
-		global WEIXIN_ACCESS_TOKEN
-		WEIXIN_ACCESS_TOKEN = str(decodejson['access_token'])
-		WEIXIN_ACCESS_TOKEN_LASTTIME = datetime.now()
-        return WEIXIN_ACCESS_TOKEN
-	else:
-		return WEIXIN_ACCESS_TOKEN
-	
-    try:
-        token = Access_Token.objects.get(id = 1)
-    except Access_Token.DoesNotExist:
-        resp, result = my_get(WEIXIN_ACCESS_TOKEN_URL)
-        decodejson = parse_Json2Dict(result)
-		
-		WEIXIN_ACCESS_TOKEN = str(decodejson['access_token'])	# 全局变量保存获取的 access_token
-		WEIXIN_ACCESS_TOKEN_LASTTIME = datetime.now()			# 记录本次保存的时间
-		
-        #at = Access_Token(token=decodejson['access_token'],expires_in=decodejson['expires_in'],date=datetime.now())
-        #at.save()
-        return WEIXIN_ACCESS_TOKEN
-    else:
-        if (datetime.now() - token.date ).seconds > (token.expires_in-300):
-            resp, result = my_get(WEIXIN_ACCESS_TOKEN_URL)
-            decodejson = parse_Json2Dict(result)
-            Access_Token.objects.filter(id = 1).update(token = decodejson['access_token'],expires_in=decodejson['expires_in'],date=datetime.now())
-            return str(decodejson['access_token'])
-        else:
-            return str(token.token)
-	'''

@@ -9,6 +9,7 @@ class AcademyInfoAdmin(admin.ModelAdmin):
 	
 class ClassInfoAdmin(admin.ModelAdmin):
 	list_display = ('id', 'academyID', 'className', 'classBegDate', 'classCharge')
+	prepopulated_fields = {'slug':('className',)}
 	
 class SyllabusInfoAdmin(admin.ModelAdmin):
 	list_display = ('id', 'academyID', 'lessonName', 'lessonContent', 'timeOut')
@@ -20,7 +21,7 @@ class StudentInfoAdmin(admin.ModelAdmin):
 	list_display = ('id', 'isRegister', 'nickName', 'stuSex', 'stuName', 'inClass', 'tel', 'qq', 'email', 'Idcard', 'createTime', 'lastTime')
 	
 class GradeInfoAdmin(admin.ModelAdmin):
-	list_display = ('id', 'stuName', 'syllaID', 'grade')
+	list_display = ('id', 'stuID', 'syllaID', 'grade')
 
 admin.site.register(AcademyInfo, AcademyInfoAdmin)
 admin.site.register(ClassInfo, ClassInfoAdmin)
