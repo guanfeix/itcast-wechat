@@ -72,24 +72,11 @@ class StudentInfo(models.Model):
 	stuName = models.CharField(max_length = 30)			# 学员真实名称，注册时输入的
 	inClass = models.ForeignKey(ClassInfo)				# 所属班级，外键约束ClassInfo表
 	tel = models.CharField(max_length = 20)				# 电话
-	qq = models.CharField(max_length = 20)				# QQ
-	email = models.EmailField(max_length = 75)			# email
-	Idcard = models.CharField(max_length = 30)			# 身份证号
 	photoAddr = models.URLField()						# 头像
 	createTime = models.DateField()						# 注册时间
 	lastTime = models.DateField()						# 最后访问时间
 	
-	# 记录学员的出生日期
-	# stuAge = models.IntegerField()
-	# 记录学院籍贯，省、市、详细
-	# IdcardAddr = models.CharField(max_length = 200)
-	# nowAddress = models.CharField(max_length = 200)
-	# 学员上学的信息
-	# isGradute = models.BooleanField(default=True)
-	# graduteDate = models.DateField()
-	# college = models.CharField(max_length = 100)
-	# eduBack = models.CharField(max_length = 30)
-	# photo = models.ImageField(upload_to='photos',blank = True)
+	# 如果后期需要更详细的用户身份信息，可以再新增其他字段
 
 	def __unicode__(self):
 		return self.stuName
@@ -102,26 +89,3 @@ class GradeInfo(models.Model):
 
 	def __unicode__(self):
 		return self.grade
-
-"""
-#EmployInfo	NUM.8_jiuye
-class EmployInfo(models.Model):
-	#empNum 
-	stuName = models.ForeignKey(StudentInfo)
-	endDAata = models.DateField()
-	isEmlpoy =models.BooleanField(default=True)
-	company = models.CharField(max_length = 300)
-
-	def __unicode__(self):
-		return self.stuName
-		
-#UserInfo	NUM.5_yonghu
-class UserInfo(models.Model):
-	#userNum 
-	account = models.CharField(max_length = 100)
-	isLogin = models.BooleanField(default=True)
-	logTime = models.DateField()
-
-	def __unicode__(self):
-		return self.account
-"""

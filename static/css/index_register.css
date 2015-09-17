@@ -371,10 +371,13 @@ ul
 	font-size: 16px;
 	color: #787878;
 }
-.titexts p
-{
+.nickName {
+	display:block;
+	font-size:18px;
+	color:#222;
 	margin-top: 40px;
 }
+
 .Informations p
 {
 	margin-top: 5px;

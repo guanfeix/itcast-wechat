@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.db import connection
 from django.core.exceptions import *
 
-
+# I Defined
 from wechat.config import *
 from wechat.functions import *
 from wechat.models import *
@@ -15,7 +15,7 @@ import hashlib
 
 # Create your views here.
 def index(request):
-	# 微信接入参考 http://mp.weixin.qq.com/wiki/17/2d4265491f12608cd170a95559800f2d.html
+	"微信接入参考 http://mp.weixin.qq.com/wiki/17/2d4265491f12608cd170a95559800f2d.html"
 	if request.method == "GET":
 		signature	= request.GET.get("signature")
 		timestamp	= request.GET.get("timestamp")
@@ -37,7 +37,7 @@ def index(request):
 		pass
 		
 def create_menu(request):
-	# 在微信公共号中创建菜单，这个请求是要我们主动发起的
+	"在微信公共号中创建菜单，这个请求是要我们主动发起的"
 	menu_data = {}
 	button1 = {}
 	button1['name'] = '我的传智历程'
@@ -58,7 +58,7 @@ def create_menu(request):
 
 
 def user_info(request):
-	# 获取用户 openid 判定 ID 是否是认证用户来跳转不同的页面
+	"获取用户 openid 判定 ID 是否是认证用户来跳转不同的页面"
 	# http://www.cnblogs.com/txw1958/p/weixin71-oauth20.html
 	code	= request.GET.get("code", "")
 	state	= request.GET.get("state", "")
@@ -108,6 +108,7 @@ def user_info(request):
 	return render(request, 'index.html', registerDict)
 	
 def register(request):
+	"成为认证学员，构造register页面"
 	code	= request.GET.get("code", "")
 	state	= request.GET.get("state", "")
 	
@@ -142,7 +143,7 @@ def register(request):
 	return render(request, 'register.html', user_info)
 	
 def academyInfo(request, academyinfo_name_slug):
-	# 点学院分类跳转到的函数，category_name_slug 是跳转的参数	
+	"点学院分类跳转到的函数，category_name_slug 是跳转的参数"
 	context_dict = {}
 	try:
 		academyInfo = AcademyInfo.objects.get(slug = academyinfo_name_slug)
@@ -153,7 +154,7 @@ def academyInfo(request, academyinfo_name_slug):
 	return render(request, 'academyInfo.html', context_dict)
 	
 def userPost(request):
-	# 接收用户申请成为认证学员的数据
+	"接收用户申请成为认证学员的数据"
 	if request.method == "POST":
 		stuInfo = StudentInfo(
 			openid = request.POST.get("openid"),						# openid
@@ -173,25 +174,23 @@ def userPost(request):
 		return HttpResponse('亲，别乱点...')
 
 def student(request, student_name_slug):
-	# 根据班级信息获取班级里面所有学生
+	"根据班级信息获取班级里面所有学生"
 	context_dict = {}
 	
-	try:
-		classInfo = ClassInfo.objects.get(slug = student_name_slug)
-	except classInfo.DoesNotExist:
-		pass
-	else:
-		try:
-			sutList = StudentInfo.objects.filter(inClass = classInfo.id, isRegister = True)
-		except StudentInfo.DoesNotExist:
-			pass
-		else:
-			context_dict["stuList"] = sutList
+	cursor = connection.cursor()
+	cursor.execute("select s.nickName, s.stuSex, s.photoAddr, s.createTime, SUM(g.grade) as allCount " 
+				"from (select * from wechat_studentinfo where inClass_id = " + student_name_slug + ") s "
+				"left join wechat_gradeinfo g "
+				"on s.id = g.stuID_id "
+				"group by stuName, stuSex, photoAddr, CreateTime "
+				"order by allCount desc")
+	# 将 execute 执行返回的列表转为字典
+	context_dict["stuList"] = dictfetchall(cursor)
 
 	return render(request, "student.html", context_dict)
 
 def courseList(request, course_name_slug):
-	# 构造用户每个阶段的课程和测试信息
+	"构造用户每个阶段的课程和测试信息"
 	stuId = request.GET.get("userId")
 	context_dict = {}
 	
@@ -199,21 +198,37 @@ def courseList(request, course_name_slug):
 	begTime = StudentInfo.objects.get(id = stuId).inClass.classBegDate
 	dateRet = datetime.date.today() - begTime
 	classTime = dateRet.days
-	
-	# 写个自定义sql，django实在实现不了
+
+	# 写个自定义sql，django貌似实现不了这个嵌套查询 + left join
+	# 参考资料 http://python.usyiyi.cn/django/topics/db/sql.html
 	cursor = connection.cursor()
-	cursor.execute("select g.stuID_id, s.lessonName, s.timeOut, g.grade "
+	cursor.execute("select s.id, "
+				"g.stuID_id, "
+				"s.lessonName, "
+				"DATE_ADD('" + str(begTime) + "', INTERVAL s.timeOut DAY) as endTime, "
+				"s.timeOut, "
+				"g.grade "
 				"from wechat_syllabusinfo s left outer join "
 				"(select * from wechat_gradeinfo where stuID_id = " + stuId + ") g "
 				"on s.id = g.syllaID_id")
+	# 将 execute 执行返回的列表转为字典
 	context_dict["courseList"] = dictfetchall(cursor)
 	context_dict["classTime"] = classTime
-
+	
 	return render(request, "courseList.html", context_dict)
 
 def topic(request):
 	context_dict = {}
-	return render(request, "courseList.html", context_dict)
+	syllId = request.GET.get("topicId")
+	try:
+		# 根据传递进来的阶段ID，查询阶段中里面的课程信息
+		course = SyllabusInfo.objects.get(pk = syllId)
+	except SyllabusInfo.DoesNotExist:
+		pass
+	else:
+		context_dict["topicInfo"] = course
+	
+	return render(request, "courseInfo.html", context_dict)
 	
 def help(request):
 	context_dict = {}

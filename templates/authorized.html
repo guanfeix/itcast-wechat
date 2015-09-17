@@ -35,9 +35,9 @@
 					<img class="imgffs" src="{{ imageUrl }}">
 				</div>
 				<div class="titexts">
-					<p>昵称：{{ userName }}</p>
+					<span class="nickName">{{ userName }}</span>
 					<div class="Informations">
-						<p class="Informations">班级：{{ inClass }}</p>
+						<p class="Informations">{{ inClass }}</p>
 					</div>
 				</div>
 			</div>
@@ -45,7 +45,7 @@
 		<div class="shows">
 			<ul class="list-groups">
 				<div class="nones">
-				<a href="/student/{{ inClass.slug }}">
+				<a href="/student/{{ inClass.id }}">
 					<li class="liss">
 						<img class="xyjs_ss" src="{% static 'images/u19.png' %}">
 							我的同班同学
@@ -73,7 +73,7 @@
 					<img class="xyjs_bss" src="{% static 'images/u14.png' %}">
 				</li>
 				</a>
-				<a href="/about">
+				<a href="http://www.itcast.cn/">
 				<li class="liss">
 					<img class="xyjs_ss" src="{% static 'images/u17.png' %}">
 						关于传智播客

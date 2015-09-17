@@ -18,7 +18,7 @@ class TestInfoAdmin(admin.ModelAdmin):
 	list_display = ('id', 'syllaID', 'topic', 'result')
 	
 class StudentInfoAdmin(admin.ModelAdmin):
-	list_display = ('id', 'isRegister', 'nickName', 'stuSex', 'stuName', 'inClass', 'tel', 'qq', 'email', 'Idcard', 'createTime', 'lastTime')
+	list_display = ('id', 'isRegister', 'nickName', 'stuSex', 'stuName', 'inClass', 'tel', 'createTime', 'lastTime')
 	
 class GradeInfoAdmin(admin.ModelAdmin):
 	list_display = ('id', 'stuID', 'syllaID', 'grade')

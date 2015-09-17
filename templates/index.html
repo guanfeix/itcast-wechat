@@ -16,8 +16,8 @@
 
 <script type="text/javascript">
 	$(document).ready(function(){
-		$(".xyjs_b").click(function(){
-			$(".none").slideToggle();
+		$("#showList").click(function(){
+			$(".none").slideToggle(200);
 		});
 	});
 </script>
@@ -43,7 +43,7 @@
 		</div>
 		<div class="show">
 			<ul class="list-group">
-				<li class="lis">
+				<li class="lis" id="showList">
 					<img class="xyjs_s" src="{% static 'images/u10.png' %}">
 						学院介绍 
 					<img class="xyjs_b" src="{% static 'images/u14.png' %}"> 

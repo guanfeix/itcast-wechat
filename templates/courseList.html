@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+<!--script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script-->
+<!--script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script-->
 
 <link href="{% static 'css/style.by.mycode.css' %}" rel="stylesheet">
 
@@ -19,33 +19,25 @@
 {% if courseList %}
 	{% for course in courseList %}
 		<div class="courseinfo">
-			<span class="coursename">{{ course.lessonName }}</span>
-			{% if course.grade == none %}
-				{% if classTime > course.timeOut %}
-					<a href="#"><span class="rightbutton_running">开始测试</span></a>
+			<div class="leftDiv">
+				<a href="/topic/?topicId={{ course.id }}" class="divButton">
+					<span class="coursename">{{ course.lessonName }}</span>
+				</a>
+				<p class="endTime">预计节课时间:{{ course.endTime }}</p>
+			</div>
+				{% if course.grade == None %}
+					{% if classTime > course.timeOut %}
+						<a href="#"><span class="rightbutton_running">开始测试</span></a>
+					{% else %}
+						<span class="rightbutton_notstart">时间未到</span>
+					{% endif %}
 				{% else %}
-					<span class="rightbutton_notstart">时间未到</span>
+					<span class="rightbutton_over">得分:{{ course.grade }}</span>
 				{% endif %}
-			{% else %}
-				<span class="rightbutton_over">得分:{{ course.grade }}</span>
-			{% endif %}
 			
 		</div>
 	{% endfor %}
 {% endif %}
-
-<!--div class="courseinfo">
-	<span class="coursename">{{ courseList.lessonName }}</span>
-    <span class="rightbutton_over">已经完成</span>
-</div>
-<div class="courseinfo">
-	<span class="coursename">C++基础和进阶</span>
-    <span class="rightbutton_running">开始测试</span>
-</div>
-<div class="courseinfo">
-	<span class="coursename">数据结构和算法</span>
-    <span class="rightbutton_notstart">时间未到</span>
-</div-->
 
 </body>
 </html>

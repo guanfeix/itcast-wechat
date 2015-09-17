@@ -19,15 +19,24 @@
 	{% for stu in stuList %}
 	<div class="userinfo">
 		<img class="userimg" src="{{ stu.photoAddr }}" />
-		<span class="username">{{ stu.stuName }}</span>
+		<span class="username">{{ stu.nickName }}</span>
 		{% if stu.stuSex == 1 %}
 			<img class="usersex" src="{% static 'images/u39.png' %}" />
 		{% else %}
 			<img class="usersex" src="{% static 'images/u43.png' %}" />
 		{% endif %}
 		<br />
-		<span class="classinfo">{{ stu.inClass }}</span>
-		<span class="count">总分：480</span>
+		<span class="classinfo">{{ stu.createTime }}</span>
+		{% if stu.allCount == None %}
+			<!--span class="count">总分：0</span-->
+		{% else %}
+			{% if forloop.counter <= 2 %}
+				<span class="top">学霸</span>
+				<span class="count">总分：{{ stu.allCount }}</span>
+			{% else %}
+				<!--span class="count">总分：{{ stu.allCount }}</span-->
+			{% endif %}
+		{% endif %}
 	</div>
 	{% endfor %}
 {% endif %}
