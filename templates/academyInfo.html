@@ -20,6 +20,7 @@
 	<div class="top">
 		<div class="topLogin">
 			<p>{{ academyInfo.academyName }} 学院</p>
+			
 		</div>
 		<div class="imgTohome">
 			<a href="{% url 'user_info' %}"><img src="{% static 'images/toHome.png' %}" style="width:20px"></a>
@@ -41,7 +42,9 @@
 	<ul class="list-group" id="list-g2">
 		<li class="lis">
 			<img class="xyjs_s" src="{% static 'images/u15.png' %}">
-			查看 {{ academyInfo.academyName }} 学科入学测试题
+
+			<a href="/baseTest/{{ academyInfo.slug }}"><span class="leftbutton_running">{{ academyInfo.academyName }} 学科入学测试题</span></a>
+			
 			<img class="xyjs_b" src="{% static 'images/u14.png' %}">
 		</li>
 	</ul>

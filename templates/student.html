@@ -26,7 +26,8 @@
 			<img class="usersex" src="{% static 'images/u43.png' %}" />
 		{% endif %}
 		<br />
-		<span class="classinfo">{{ stu.createTime }}</span>
+		<!--span class="classinfo">{{ stu.createTime }}</span-->
+		<span class="classinfo">{{ stu.country }}-{{ stu.province }}-{{ stu.city }}</span>
 		{% if stu.allCount == None %}
 			<!--span class="count">总分：0</span-->
 		{% else %}

@@ -1,6 +1,7 @@
 #encoding:utf-8
 from xml.etree.ElementTree import Element
 from xml.etree.ElementTree import tostring
+from xml.etree.ElementTree import dump
 from datetime import datetime
 from lxml import etree
 import httplib2
@@ -25,9 +26,10 @@ def parse_Dict2Xml(tag, d):
 	elem = Element(tag)
 	for key, val in d.items():
 		child = Element(key)
-		child.text=str(val)
+		child.text = str(val)
 		elem.append(child)
-	my_str = tostring(elem, encoding=u'UTF-8')
+		
+	my_str = tostring(elem, encoding = u'UTF-8')
 	return my_str
 
 # json样式的str ==> dict

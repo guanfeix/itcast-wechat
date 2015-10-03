@@ -27,12 +27,21 @@ urlpatterns = [
 	url(r'^student/(?P<student_name_slug>[\w\-]+)/$', 'wechat.views.student', name = "student"),
 	url(r'^courseList/(?P<course_name_slug>[\w\-]+)/$', 'wechat.views.courseList', name = "courseList"),
 	url(r'^topic/', 'wechat.views.topic', name = "topic"),
+	url(r'^userPost/', 'wechat.views.userPost', name = 'userPost'),
+	url(r'^ajaxGetClassInfo/', 'wechat.views.ajaxGetClassInfo', name = 'ajaxGetClassInfo'),
+
+	# ajax Test
+	url(r'^ajaxTest/', 'wechat.tests.ajaxTest', name = 'ajaxTest'),
+	
+	# by 'li zhiwei' and 'bo longfei'
+	url(r'^baseTest/(?P<academyinfo_name_slug>[\w\-]+)/$', 'wechat.views.baseTest', name = "baseTest"),
+	url(r'^topicTest/', 'wechat.views.topicTest', name = "topicTest"),
+	url(r'^quiz_choice/', 'wechat.views.quiz_choice', name = "quiz_choice"),
+	url(r'^get_answer/', 'wechat.views.get_answer', name = "get_answer"),
 	url(r'^help/', 'wechat.views.help', name = "help"),
 	url(r'^about/', 'wechat.views.about', name = "about"),
 	
-	url(r'^userPost/', 'wechat.views.userPost', name = 'userPost'),
-	url(r'^ajaxTest/', 'wechat.views.ajaxTest', name = 'ajaxTest'),
-	
+	# static urls
 	url(r'^media/(?P<path>.*)$', 'django.views.static.serve', { 'document_root': settings.MEDIA_ROOT }),
 	url(r'^static/(?P<path>.*)$','django.views.static.serve',{ 'document_root': settings.STATIC_PATH }),
 ]

@@ -120,3 +120,6 @@ STATICFILES_DIRS = ( STATIC_PATH, )
 # media
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# login
+LOGIN_URL = '/wechat/'

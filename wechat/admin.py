@@ -1,5 +1,5 @@
 from django.contrib import admin
-from wechat.models import AcademyInfo, ClassInfo, SyllabusInfo, TestInfo, StudentInfo, GradeInfo
+from wechat.models import UserProfile, AcademyInfo, ClassInfo, SyllabusInfo, TestInfo, StudentInfo, GradeInfo, TestAnsInfo
 
 # Register your models here.
 
@@ -15,7 +15,13 @@ class SyllabusInfoAdmin(admin.ModelAdmin):
 	list_display = ('id', 'academyID', 'lessonName', 'lessonContent', 'timeOut')
 	
 class TestInfoAdmin(admin.ModelAdmin):
-	list_display = ('id', 'syllaID', 'topic', 'result')
+	list_display = ('id', 'syllaID', 'topic')
+	
+class TestAnsInfoAdmin(admin.ModelAdmin):
+	list_display = ('id', 'testInfoId', 'option', 'rightOption')
+
+class UserProfileAdmin(admin.ModelAdmin):
+	list_display = ('id', 'fromUser', 'nickName', 'stuSex', 'stuName', 'inClass', 'tel', 'createTime', 'lastTime')
 	
 class StudentInfoAdmin(admin.ModelAdmin):
 	list_display = ('id', 'isRegister', 'nickName', 'stuSex', 'stuName', 'inClass', 'tel', 'createTime', 'lastTime')
@@ -27,5 +33,7 @@ admin.site.register(AcademyInfo, AcademyInfoAdmin)
 admin.site.register(ClassInfo, ClassInfoAdmin)
 admin.site.register(SyllabusInfo, SyllabusInfoAdmin)
 admin.site.register(TestInfo, TestInfoAdmin)
+admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(StudentInfo, StudentInfoAdmin)
 admin.site.register(GradeInfo, GradeInfoAdmin)
+admin.site.register(TestAnsInfo, TestAnsInfoAdmin)

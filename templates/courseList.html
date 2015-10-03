@@ -23,11 +23,11 @@
 				<a href="/topic/?topicId={{ course.id }}" class="divButton">
 					<span class="coursename">{{ course.lessonName }}</span>
 				</a>
-				<p class="endTime">预计节课时间:{{ course.endTime }}</p>
+				<p class="endTime">预计结课时间:{{ course.endTime }}</p>
 			</div>
 				{% if course.grade == None %}
 					{% if classTime > course.timeOut %}
-						<a href="#"><span class="rightbutton_running">开始测试</span></a>
+						<a href="/topicTest/?topicId={{ course.id }}"><span class="rightbutton_running">开始测试</span></a>
 					{% else %}
 						<span class="rightbutton_notstart">时间未到</span>
 					{% endif %}
