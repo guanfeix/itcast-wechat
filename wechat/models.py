@@ -11,7 +11,7 @@ ClassInfo		# 班级表
 SyllabusInfo	# 课程表
 TestInfo		# 测试题目表
 TestAnsInfo		# 测试题目选项和正确答案表
-StudentInfo		# 用户信息表
+UserProfile		# 用户信息表
 GradeInfo		# 测试结果表
 CREATE DATABASE itcast_wechat DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 """
@@ -91,11 +91,11 @@ class UserProfile(models.Model):
 	# 可以再增加其他字段，比如从微信获取到的用户籍贯等信息
 
 	def __unicode__(self):
-		return self.fromUser.username
+		return self.fromUser.nickName
 
 class GradeInfo(models.Model):
 	"GradeInfo	测试结果表"
-	stuID = models.ForeignKey(StudentInfo)			# 所属学员ID
+	stuID = models.ForeignKey(UserProfile)			# 所属学员ID
 	syllaID = models.ForeignKey(SyllabusInfo)		# 所属课程ID
 	grade = models.CharField(max_length = 10)		# 测试结果
 

@@ -243,12 +243,6 @@ def userPost(request):
 		user.is_active = False
 		user.save()
 		
-		print "========================"
-		request.POST.get("country")
-		request.POST.get("province")
-		request.POST.get("city")
-		print "========================"
-		
 		profile = UserProfile(
 			fromUser = user,
 			nickName = request.POST.get("nickname"),					# 用户昵称，由微信接口获取
