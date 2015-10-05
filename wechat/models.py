@@ -27,7 +27,7 @@ class AcademyInfo(models.Model):
 	def save(self, *args, **kwargs):
 		self.slug = slugify(self.academyName)
 		super(AcademyInfo, self).save(*args, **kwargs)
-	
+
 	def __unicode__(self):
 		return self.academyName
 
@@ -38,11 +38,11 @@ class ClassInfo(models.Model):
 	slug = models.SlugField(unique = True)				# 用来做页面跳转
 	classBegDate = models.DateField()					# 开班日期
 	classCharge = models.CharField(max_length = 30)		# 班主任
-	
+
 	def save(self, *args, **kwargs):
 		self.slug = slugify(self.className)
 		super(ClassInfo, self).save(*args, **kwargs)
-	
+
 	def __unicode__(self):
 		return self.className
 
@@ -69,7 +69,7 @@ class TestAnsInfo(models.Model):
 	testInfoId = models.ForeignKey(TestInfo)				# 对应题目
 	option = models.CharField(max_length = 300)				# 题目具体选项内容
 	rightOption = models.BooleanField(default = False)		# 是否是正确答案
-	
+
 	def __unicode__(self):
 		return self.option
 
@@ -87,31 +87,13 @@ class UserProfile(models.Model):
 	photoAddr = models.URLField()						# 头像
 	createTime = models.DateField()						# 注册时间
 	lastTime = models.DateField()						# 最后访问时间
-	
+
 	# 可以再增加其他字段，比如从微信获取到的用户籍贯等信息
-	
+
 	def __unicode__(self):
 		return self.fromUser.username
-		
-class StudentInfo(models.Model):
-	"StudentInfo	学员信息表"
-	openid = models.CharField(max_length = 100, unique = True)			# 标识用户唯一身份的openid
-	isRegister = models.BooleanField(default=False)		# 是否是认证学员，默认不是
-	nickName = models.CharField(max_length = 30)		# 微信昵称
-	stuSex = models.IntegerField(default=True)			# 微信标识的性别
-	stuName = models.CharField(max_length = 30)			# 学员真实名称，注册时输入的
-	inClass = models.ForeignKey(ClassInfo)				# 所属班级，外键约束ClassInfo表
-	tel = models.CharField(max_length = 20)				# 电话
-	photoAddr = models.URLField()						# 头像
-	createTime = models.DateField()						# 注册时间
-	lastTime = models.DateField()						# 最后访问时间
-	
-	# 如果后期需要更详细的用户身份信息，可以再新增其他字段
 
-	def __unicode__(self):
-		return self.stuName
-
-class GradeInfo(models.Model):	
+class GradeInfo(models.Model):
 	"GradeInfo	测试结果表"
 	stuID = models.ForeignKey(StudentInfo)			# 所属学员ID
 	syllaID = models.ForeignKey(SyllabusInfo)		# 所属课程ID

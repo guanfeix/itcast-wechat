@@ -6,11 +6,40 @@
 ](http://www.mycode.net.cn/platform/linux-unix/938.html)
 
 ### 如何部署
+
+* 克隆项目到本地
+
+  ```
+  git clone https://github.com/nmgwddj/itcast_wechat.git
+  ```
+* 创建数据库
+
+  使用如下命令在 mysql 中创建数据库
+  ```
+  CREATE DATABASE itcast_wechat DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+  ```
+
+* 修改项目中连接数据库的配置信息
+
+  打开 `itcast_wechat/settings.py` 找到如下信息，将信息修改为你得数据库用户名和密码即可
+  ```
+  DATABASES = {
+      'default': {
+          'ENGINE': 'django.db.backends.mysql',
+          'NAME': 'itcast_wechat',
+          'USER': 'root',
+          'PASSWORD': 'your database password',
+          'HOST': '',
+          'PORT': '3306'
+      }
+  }
+  ```
+
 * 设定你的微信公共号信息
 
   在一切开始之前，你首先要具备一个开发者账号，可以到微信开发者页面申请一个临时的开发者账号，并配置好你的 URL 等信息，URL 地址见下方“修改你得回调 URL”
 
-  切换到项目的 wechat 目录，打开 config.py 配置文件，修改 Token、AppID、AppSecret 为你微信开发者账号所分配的信息，如下所示
+  打开 `wechat/config.py` 配置文件，修改 Token、AppID、AppSecret 为你微信开发者账号所分配的信息，如下所示
 
   ```
   WEIXIN_TOKEN = 'itcast_wechat'
