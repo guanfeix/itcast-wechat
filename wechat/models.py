@@ -1,4 +1,4 @@
-#encoding:utf-8
+ï»¿#encoding:utf-8
 from django.db import models
 from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
@@ -6,23 +6,23 @@ from django.template.defaultfilters import slugify
 # Create your models here.
 
 """
-AcademyInfo		# Ñ§Ôº±í
-ClassInfo		# °à¼¶±í
-SyllabusInfo	# ¿Î³Ì±í
-TestInfo		# ²âÊÔÌâÄ¿±í
-TestAnsInfo		# ²âÊÔÌâÄ¿Ñ¡ÏîºÍÕıÈ·´ğ°¸±í
-StudentInfo		# ÓÃ»§ĞÅÏ¢±í
-GradeInfo		# ²âÊÔ½á¹û±í
+AcademyInfo		# å­¦é™¢è¡¨
+ClassInfo		# ç­çº§è¡¨
+SyllabusInfo	# è¯¾ç¨‹è¡¨
+TestInfo		# æµ‹è¯•é¢˜ç›®è¡¨
+TestAnsInfo		# æµ‹è¯•é¢˜ç›®é€‰é¡¹å’Œæ­£ç¡®ç­”æ¡ˆè¡¨
+StudentInfo		# ç”¨æˆ·ä¿¡æ¯è¡¨
+GradeInfo		# æµ‹è¯•ç»“æœè¡¨
 CREATE DATABASE itcast_wechat DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 """
 
 class AcademyInfo(models.Model):
-	"AcademyInfo	Ñ§ÔºĞÅÏ¢"
-	academyName = models.CharField(max_length = 100,unique = True)	# Ãû³Æ
-	slug = models.SlugField(unique = True)							# ÎŞ¿Õ¸ñµÄÑ§ÔºÃû³Æ
-	academyPre = models.CharField(max_length = 30)					# Ôº³¤
-	academyIntro = models.TextField()								# ¼ò½é
-	academyImage = models.ImageField(upload_to = 'upload')			# Ñ§ÔºÍ¼Æ¬
+	"AcademyInfo	å­¦é™¢ä¿¡æ¯"
+	academyName = models.CharField(max_length = 100,unique = True)	# åç§°
+	slug = models.SlugField(unique = True)							# æ— ç©ºæ ¼çš„å­¦é™¢åç§°
+	academyPre = models.CharField(max_length = 30)					# é™¢é•¿
+	academyIntro = models.TextField()								# ç®€ä»‹
+	academyImage = models.ImageField(upload_to = 'upload')			# å­¦é™¢å›¾ç‰‡
 
 	def save(self, *args, **kwargs):
 		self.slug = slugify(self.academyName)
@@ -32,12 +32,12 @@ class AcademyInfo(models.Model):
 		return self.academyName
 
 class ClassInfo(models.Model):
-	"ClassInfo	°à¼¶ĞÅÏ¢±í"
-	academyID = models.ForeignKey(AcademyInfo)			# ËùÔÚÑ§ÔºID
-	className = models.CharField(max_length = 100)		# °à¼¶Ãû³Æ
-	slug = models.SlugField(unique = True)				# ÓÃÀ´×öÒ³ÃæÌø×ª
-	classBegDate = models.DateField()					# ¿ª°àÈÕÆÚ
-	classCharge = models.CharField(max_length = 30)		# °àÖ÷ÈÎ
+	"ClassInfo	ç­çº§ä¿¡æ¯è¡¨"
+	academyID = models.ForeignKey(AcademyInfo)			# æ‰€åœ¨å­¦é™¢ID
+	className = models.CharField(max_length = 100)		# ç­çº§åç§°
+	slug = models.SlugField(unique = True)				# ç”¨æ¥åšé¡µé¢è·³è½¬
+	classBegDate = models.DateField()					# å¼€ç­æ—¥æœŸ
+	classCharge = models.CharField(max_length = 30)		# ç­ä¸»ä»»
 	
 	def save(self, *args, **kwargs):
 		self.slug = slugify(self.className)
@@ -47,75 +47,75 @@ class ClassInfo(models.Model):
 		return self.className
 
 class SyllabusInfo(models.Model):
-	"SyllabusInfo	¿Î³ÌÃû³Æ"
-	academyID = models.ForeignKey(AcademyInfo)			# ËùÊôÑ§ÔºID Èç C/C++
-	lessonName = models.CharField(max_length = 300)		# ¿Î³ÌÃû³Æ Èç MFC½×¶Î¡¢Qt½×¶Î
-	lessonContent = models.TextField()					# ¿Î³ÌÄÚÈİ Èç 1¡¢MFC¿Ø¼şÊ¹ÓÃ	2¡¢MFC Socket
-	timeOut = models.IntegerField()						# Ê±³¤£¬ÌìÊı£¬ÒÔ»ù´¡ÈëÑ§Ê±¼äÎª×¼
+	"SyllabusInfo	è¯¾ç¨‹åç§°"
+	academyID = models.ForeignKey(AcademyInfo)			# æ‰€å±å­¦é™¢ID å¦‚ C/C++
+	lessonName = models.CharField(max_length = 300)		# è¯¾ç¨‹åç§° å¦‚ MFCé˜¶æ®µã€Qté˜¶æ®µ
+	lessonContent = models.TextField()					# è¯¾ç¨‹å†…å®¹ å¦‚ 1ã€MFCæ§ä»¶ä½¿ç”¨	2ã€MFC Socket
+	timeOut = models.IntegerField()						# æ—¶é•¿ï¼Œå¤©æ•°ï¼Œä»¥åŸºç¡€å…¥å­¦æ—¶é—´ä¸ºå‡†
 
 	def __unicode__(self):
 		return self.lessonName
 
 class TestInfo(models.Model):
-	"TestInfo	Ìâ¿âĞÅÏ¢±í"
-	syllaID= models.ForeignKey(SyllabusInfo)			# ËùÊô¿Î³ÌÃû³Æ
-	topic = models.TextField()							# ÌâÄ¿
+	"TestInfo	é¢˜åº“ä¿¡æ¯è¡¨"
+	syllaID= models.ForeignKey(SyllabusInfo)			# æ‰€å±è¯¾ç¨‹åç§°
+	topic = models.TextField()							# é¢˜ç›®
 
 	def __unicode__(self):
 		return self.topic
 
 class TestAnsInfo(models.Model):
-	"TestAnsInfo	ÌâÄ¿Ñ¡ÏîĞÅ±í"
-	testInfoId = models.ForeignKey(TestInfo)				# ¶ÔÓ¦ÌâÄ¿
-	option = models.CharField(max_length = 300)				# ÌâÄ¿¾ßÌåÑ¡ÏîÄÚÈİ
-	rightOption = models.BooleanField(default = False)		# ÊÇ·ñÊÇÕıÈ·´ğ°¸
+	"TestAnsInfo	é¢˜ç›®é€‰é¡¹ä¿¡è¡¨"
+	testInfoId = models.ForeignKey(TestInfo)				# å¯¹åº”é¢˜ç›®
+	option = models.CharField(max_length = 300)				# é¢˜ç›®å…·ä½“é€‰é¡¹å†…å®¹
+	rightOption = models.BooleanField(default = False)		# æ˜¯å¦æ˜¯æ­£ç¡®ç­”æ¡ˆ
 	
 	def __unicode__(self):
 		return self.option
 
 class UserProfile(models.Model):
-	"¸ÄÔìÓÃ»§Éí·İÈÏÖ¤ËùĞè±í½á¹¹"
+	"æ”¹é€ ç”¨æˆ·èº«ä»½è®¤è¯æ‰€éœ€è¡¨ç»“æ„"
 	fromUser = models.OneToOneField(User)
-	nickName = models.CharField(max_length = 30)		# Î¢ĞÅêÇ³Æ
-	stuSex = models.IntegerField(default=True)			# Î¢ĞÅ±êÊ¶µÄĞÔ±ğ
-	stuName = models.CharField(max_length = 30)			# Ñ§Ô±ÕæÊµÃû³Æ£¬×¢²áÊ±ÊäÈëµÄ
-	country = models.CharField(max_length = 30)			# ¹ú¼Ò
-	province = models.CharField(max_length = 30)		# Ê¡·İ
-	city = models.CharField(max_length = 30)			# ³ÇÊĞ
-	inClass = models.ForeignKey(ClassInfo)				# ËùÊô°à¼¶£¬Íâ¼üÔ¼ÊøClassInfo±í
-	tel = models.CharField(max_length = 20)				# µç»°
-	photoAddr = models.URLField()						# Í·Ïñ
-	createTime = models.DateField()						# ×¢²áÊ±¼ä
-	lastTime = models.DateField()						# ×îºó·ÃÎÊÊ±¼ä
+	nickName = models.CharField(max_length = 30)		# å¾®ä¿¡æ˜µç§°
+	stuSex = models.IntegerField(default=True)			# å¾®ä¿¡æ ‡è¯†çš„æ€§åˆ«
+	stuName = models.CharField(max_length = 30)			# å­¦å‘˜çœŸå®åç§°ï¼Œæ³¨å†Œæ—¶è¾“å…¥çš„
+	country = models.CharField(max_length = 30)			# å›½å®¶
+	province = models.CharField(max_length = 30)		# çœä»½
+	city = models.CharField(max_length = 30)			# åŸå¸‚
+	inClass = models.ForeignKey(ClassInfo)				# æ‰€å±ç­çº§ï¼Œå¤–é”®çº¦æŸClassInfoè¡¨
+	tel = models.CharField(max_length = 20)				# ç”µè¯
+	photoAddr = models.URLField()						# å¤´åƒ
+	createTime = models.DateField()						# æ³¨å†Œæ—¶é—´
+	lastTime = models.DateField()						# æœ€åè®¿é—®æ—¶é—´
 	
-	# ¿ÉÒÔÔÙÔö¼ÓÆäËû×Ö¶Î£¬±ÈÈç´ÓÎ¢ĞÅ»ñÈ¡µ½µÄÓÃ»§¼®¹áµÈĞÅÏ¢
+	# å¯ä»¥å†å¢åŠ å…¶ä»–å­—æ®µï¼Œæ¯”å¦‚ä»å¾®ä¿¡è·å–åˆ°çš„ç”¨æˆ·ç±è´¯ç­‰ä¿¡æ¯
 	
 	def __unicode__(self):
 		return self.fromUser.username
 		
 class StudentInfo(models.Model):
-	"StudentInfo	Ñ§Ô±ĞÅÏ¢±í"
-	openid = models.CharField(max_length = 100, unique = True)			# ±êÊ¶ÓÃ»§Î¨Ò»Éí·İµÄopenid
-	isRegister = models.BooleanField(default=False)		# ÊÇ·ñÊÇÈÏÖ¤Ñ§Ô±£¬Ä¬ÈÏ²»ÊÇ
-	nickName = models.CharField(max_length = 30)		# Î¢ĞÅêÇ³Æ
-	stuSex = models.IntegerField(default=True)			# Î¢ĞÅ±êÊ¶µÄĞÔ±ğ
-	stuName = models.CharField(max_length = 30)			# Ñ§Ô±ÕæÊµÃû³Æ£¬×¢²áÊ±ÊäÈëµÄ
-	inClass = models.ForeignKey(ClassInfo)				# ËùÊô°à¼¶£¬Íâ¼üÔ¼ÊøClassInfo±í
-	tel = models.CharField(max_length = 20)				# µç»°
-	photoAddr = models.URLField()						# Í·Ïñ
-	createTime = models.DateField()						# ×¢²áÊ±¼ä
-	lastTime = models.DateField()						# ×îºó·ÃÎÊÊ±¼ä
+	"StudentInfo	å­¦å‘˜ä¿¡æ¯è¡¨"
+	openid = models.CharField(max_length = 100, unique = True)			# æ ‡è¯†ç”¨æˆ·å”¯ä¸€èº«ä»½çš„openid
+	isRegister = models.BooleanField(default=False)		# æ˜¯å¦æ˜¯è®¤è¯å­¦å‘˜ï¼Œé»˜è®¤ä¸æ˜¯
+	nickName = models.CharField(max_length = 30)		# å¾®ä¿¡æ˜µç§°
+	stuSex = models.IntegerField(default=True)			# å¾®ä¿¡æ ‡è¯†çš„æ€§åˆ«
+	stuName = models.CharField(max_length = 30)			# å­¦å‘˜çœŸå®åç§°ï¼Œæ³¨å†Œæ—¶è¾“å…¥çš„
+	inClass = models.ForeignKey(ClassInfo)				# æ‰€å±ç­çº§ï¼Œå¤–é”®çº¦æŸClassInfoè¡¨
+	tel = models.CharField(max_length = 20)				# ç”µè¯
+	photoAddr = models.URLField()						# å¤´åƒ
+	createTime = models.DateField()						# æ³¨å†Œæ—¶é—´
+	lastTime = models.DateField()						# æœ€åè®¿é—®æ—¶é—´
 	
-	# Èç¹ûºóÆÚĞèÒª¸üÏêÏ¸µÄÓÃ»§Éí·İĞÅÏ¢£¬¿ÉÒÔÔÙĞÂÔöÆäËû×Ö¶Î
+	# å¦‚æœåæœŸéœ€è¦æ›´è¯¦ç»†çš„ç”¨æˆ·èº«ä»½ä¿¡æ¯ï¼Œå¯ä»¥å†æ–°å¢å…¶ä»–å­—æ®µ
 
 	def __unicode__(self):
 		return self.stuName
 
 class GradeInfo(models.Model):	
-	"GradeInfo	²âÊÔ½á¹û±í"
-	stuID = models.ForeignKey(StudentInfo)			# ËùÊôÑ§Ô±ID
-	syllaID = models.ForeignKey(SyllabusInfo)		# ËùÊô¿Î³ÌID
-	grade = models.CharField(max_length = 10)		# ²âÊÔ½á¹û
+	"GradeInfo	æµ‹è¯•ç»“æœè¡¨"
+	stuID = models.ForeignKey(StudentInfo)			# æ‰€å±å­¦å‘˜ID
+	syllaID = models.ForeignKey(SyllabusInfo)		# æ‰€å±è¯¾ç¨‹ID
+	grade = models.CharField(max_length = 10)		# æµ‹è¯•ç»“æœ
 
 	def __unicode__(self):
 		return self.grade
