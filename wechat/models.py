@@ -95,7 +95,7 @@ class UserProfile(models.Model):
 
 class GradeInfo(models.Model):
 	"GradeInfo	测试结果表"
-	stuID = models.ForeignKey(UserProfile)			# 所属学员ID
+	stuID = models.ForeignKey(User)					# 所属学员ID
 	syllaID = models.ForeignKey(SyllabusInfo)		# 所属课程ID
 	grade = models.CharField(max_length = 10)		# 测试结果
 

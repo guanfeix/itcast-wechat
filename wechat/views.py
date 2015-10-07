@@ -149,7 +149,8 @@ def user_info(request):
 		
 			# 获取用户的个人信息
 			userInfo = {}
-			userInfo["userId"]	 = profile.id
+			# 用户的 id 以 django 提供的 auth_user 表为准
+			userInfo["userId"]	 = profile.fromUser.id
 			userInfo["imageUrl"] = profile.photoAddr
 			userInfo["userName"] = profile.nickName
 			userInfo["inClass"]	 = profile.inClass
@@ -268,12 +269,14 @@ def student(request, student_name_slug):
 	"根据班级信息获取班级里面所有学生"	
 	context_dict = {}
 	
+	# a.is_active = 1 是判定该用户是否是认证用户
 	cursor = connection.cursor()
 	cursor.execute("select s.nickName, s.stuSex, s.photoAddr, s.country, s.province, s.city, s.createTime, SUM(g.grade) as allCount " 
-				"from (select * from wechat_userprofile where inClass_id = " + student_name_slug + ") s "
+				"from (select a.id, u.stuName, u.nickName, u.stuSex, u.photoAddr, u.country, u.province, u.city, u.createTime from "
+				"wechat_userprofile u right join auth_user a on u.fromUser_id = a.id where a.is_active = 1 and u.inClass_id = " + student_name_slug + ") s "
 				"left join wechat_gradeinfo g "
 				"on s.id = g.stuID_id "
-				"group by stuName, stuSex, photoAddr, CreateTime "
+				"group by stuName, nickName, stuSex, photoAddr, country, province, city, createTime "
 				"order by allCount desc")
 	# 将 execute 执行返回的列表转为字典
 	context_dict["stuList"] = dictfetchall(cursor)
@@ -287,7 +290,10 @@ def courseList(request, course_name_slug):
 	context_dict = {}
 	
 	# 获取用户所在班级的开班时间
-	begTime = UserProfile.objects.get(id = stuId).inClass.classBegDate
+	fromUserInfo = User.objects.get(id = stuId);
+	print "--------" + stuId
+	begTime = UserProfile.objects.get(fromUser = fromUserInfo).inClass.classBegDate
+	print "========"
 	dateRet = datetime.date.today() - begTime
 	classTime = dateRet.days
 
